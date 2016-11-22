@@ -1,8 +1,10 @@
-window.addEventListener('load', setFocus)
+window.addEventListener('load', setFocus)       //on page load, run function
 
 function setFocus() {
-  document.getElementById('name').focus()
+  $("#name").focus()       //set page focus to name input
+  paymentUpdate()       //show only credit card payment info
 }
+
 
 //set variables to reference the job Role section of the form
 var other = '';
@@ -47,37 +49,42 @@ Designs.addEventListener('change', function(){        //When user selects design
 })
 
 
-//Set price variables for each activity
-var list = document.getElementById('activities')
-var first = $("input[name|='all']");
+//Easy access to all activity checkboxes
+var list = $('#activities :input');
+var first = $(":input[name|='all']");
 var second = $("input[name|='js-frameworks']");
 var third = $("input[name|='js-libs']");
 var fourth = $("input[name|='express']");
 var fifth = $("input[name|='node']");
 var sixth = $("input[name|='build-tools']");
 var seventh = $("input[name|='npm']");
+var total = 0; //set the Total price to start at 0
 
+list.on('click', function(){        //when user clicks an input
+  noTimeConflict()        //hide conflicting activities
 
-list.addEventListener('click', function(){
-  noTimeConflict
-
+  if(this == list[0] && this.checked){        //when main conference is clicked
+    priceUpdate(200)        //add $200 to the total
+  } else if (this.checked){       //otherwise add $100
+    priceUpdate(100)
+  } else if (this == list[0]){        //and if choice is unchecked, remove the cost
+    priceUpdate(-200)
+  } else {
+    priceUpdate(-100)
+  }
 })
 
 function noTimeConflict(){
-  var total = '';
 
   //If the user clicks a class,
   //disable all events with confliction times
-  if( $(workshop).prop("checked") == true ){
-
-    $(conflict).prop("disabled", true)
-    priceUpdate(total, 100)
+  if( second.prop("checked") == true ){
+    fourth.prop("disabled", true)
   } else {
-    $(conflict).prop("disabled", false)
+    fourth.prop("disabled", false)
   }
   if( fourth.prop("checked") == true){
     second.prop("disabled", true)
-    priceUpdate(total, 100)
   } else {
     second.prop("disabled", false)
   }
@@ -91,10 +98,53 @@ function noTimeConflict(){
   } else {
     third.prop("disabled", false)
   }
+}
+
+function priceUpdate(cost) {
+  total += cost;
+  $('#total').remove();
+  $("#activities").append("<span id='total'>Total: $" + total + "</span>");
+}
+
+function paymentUpdate() {
+  $("#payment").val("credit card")        //set default payment method
+  $("#payPal").hide()       //hide paypal info
+  $("#bitCoin").hide()        //hide bitcoin info
 
 }
 
-function priceUpdate(total, cost) {
-  total = total + cost
-  $("#activities").append("<span>Total: $" + total + "</span>");
-}
+$("#payment").on('change', function(){        //function to update payment info
+  if(this.value == "credit card"){        //when credit card is selected, hide others
+    $("#credit-card").fadeIn()
+    $("#payPal").fadeOut()
+    $("#bitCoin").fadeOut()
+  } else if(this.value == "paypal"){        //when paypal is selected, hide others
+    $("#payPal").fadeIn()
+    $("#credit-card").fadeOut()
+    $("#bitCoin").fadeOut()
+  } else if (this.value == "bitcoin"){        //when bitcoin is selected, hide others
+    $("#bitCoin").fadeIn()
+    $("#credit-card").fadeOut()
+    $("#payPal").fadeOut()
+  }
+})
+
+
+$(":button").on("click", function(){
+  //provide some form validation
+  //Name field cannot be blank
+  if($("#name").value == null) {
+    alert("Please enter a valid name")
+  }
+
+  //the email field but contain a validly formatted email adress
+  if($("#email").value == null){
+    alert("you must enter an email adress")
+  }
+  //at least on activity should be selected in the "Register for Activities" section
+  //if the payment option is credit card, check that
+    //all fields are filled out
+    //credit card field should accept a number between 13 and 16 digits
+    //zipcode field should accept a 5 digit number
+    //the CVV field should accept a 3 digit number
+})

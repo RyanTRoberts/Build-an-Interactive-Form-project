@@ -86,8 +86,11 @@ input {
 	font-weight: 500;
 	padding: .8em;
 	background: #c1deeb;
-	border: 2px solid #c1deeb;
 	outline: none;
+}
+
+input {
+  border: 2px solid #c1deeb;
 }
 
 input:focus {

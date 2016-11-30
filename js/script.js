@@ -24,7 +24,7 @@ var cvvLabel = $("div > label[for='cvv']")//store cvv label
 jobSelect.on('change', function(){        //When select option is changed
   other = jobSelect.val()      //Get the value of current option
     if(other == 'other'){       //if current option == other
-      jobSelect.after('<input type="text" id="other-title" name="other-title" placeholder="Your Title">')       //add Text input
+      jobSelect.after('<input type="text" id="other-title" name="other-title" placeholder="Your job role">')       //add Text input
     } else {
       $('#other-title').remove()        //Remove the Text input if current option != other
     }

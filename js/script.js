@@ -178,6 +178,7 @@ function validate(){
     ccNumLabel.css("color", "red")
     ccNumLabel.text("Card Number: Please enter a card number")
     event.preventDefault()
+  } else if(paymentOption == "credit card" && $("#cc-num").val().length <= 13 || $("#cc-num").val().length >= 16 ){
     ccNumLabel.css("color", "red")
     ccNumLabel.text("Card Number: Your card number must be 16 digits long")
     event.preventDefault()
